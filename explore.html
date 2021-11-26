@@ -3,216 +3,225 @@ include("../function/condb.php");
 ?>
 <!DOCTYPE html>
 <html lang="en">
-    
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" type="text/css" href="basic.css">
-
-    <style>
-      .inner_content {
-          padding: 50px 130px 220px 130px;
-      }
-      
-      .inner_content table {
-          background-color: white;
-      }
-      
-      li img {
-          width: 100%;
-          height: 100%;
-      }
-      
-      input[type=text] {
-          color: black;
-      }
-      
-      form {
-          margin-bottom: 0em;
-      }
-
-      /* ---------------------------- */
-/*  Table Styles
-------------------------------- */
-
-.table-wrapper {
-margin: 50px;
-box-shadow: 0px 35px 50px rgba(27, 31, 49, 0.1);
-}
-
-.table {
-/*margin-top:10px;*/         /*用來調table在頁面中的位置*/
-border-collapse: collapse;
-width: 100%;
-background-color: white;
-}
-
-.table td,
-.table th {
-text-align: center;
-padding: 10px;
-}
-
-.table td {
-border-right: 1px solid #f8f8f8;
-}
-
-/*  thead th color
-------------------------------- */
-
-.table thead th {
-color: #ffffff;
-background: #ffb4a2; /* 指定第一個和預設的標題顏色 */
-}
-
-.table thead th:nth-child(2) {
-background: #e5989b; /* 指定第二個標題顏色 */
-}
-
-.table thead th:nth-child(3) {
-background: #b5838d; /* 指定第三個標題顏色 */
-}
-
-.table thead th:nth-child(4) {
-background: #6d6875; /* 指定第四個標題顏色 */
-}
-
-/*  table ul
-------------------------------- */
-
-.table ul {
-padding: 20px;
-margin: 0;
-text-align: left;
-}
-.table ul li {
-border-bottom: 1px solid #e7e7e7;
-padding: 5px;
-position: relative;
-list-style-type: none;
-}
-
-/*  Responsive
-------------------------------- */
-
-@media (max-width: 767px) {
-.table-wrapper {
-  margin: 30px 15px;
-}
-
-.table thead {
-  display: none;
-}
-
-.table td {
-  display: block; /* 一定要下！ */
-  padding: 0;
-}
-
-.table td:before {
-  content: attr(data-title); /* 顯示 data-title */
-  display: inline-block;
-  width: 100%;
-  font-weight: 500;
-  padding: 6px 0;
-  color: #ffffff;
-  background: #ffb4a2; /* 指定第一個和預設的標題顏色 */
-}
-
-.table td:nth-child(2):before {
-  background: #e5989b; /* 指定第二個標題顏色 */
-}
-
-.table td:nth-child(3):before {
-  background: #b5838d; /* 指定第三個標題顏色 */
-}
-
-.table td:nth-child(4):before {
-  background: #6d6875; /* 指定第四個標題顏色 */
-}
-}
-
-    </style>
-
-
-</head>
-
-<body>
-    <nav>
-        <a href="./index.html" class="logo">拉麵地圖ラーメンマップ</a>
-        <ul>
-          <li><a href="./map.html" >地圖。地図</a></li>
-          <li><a href="./route_ver1.html">捷運路線。MRTルート</a></li>
-          <li><a href="./explore.html">探索。見る</a></li>
-        </ul>
-    </nav>
-    <div >
-
-    </div>
-</body>
-</html>
-
-<html>
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  <title>index.php</title>
- 
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" type="text/css" href="/css/basic.css">
   <link type="text/css" rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap.css">
   <link type="text/css" rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap.min.css">
   <link type="text/css" rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap-theme.css">
   <link type="text/css" rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap-theme.min.css">
+  <style>
+    .inner_content {
+      padding: 50px 130px 220px 130px;
+    }
+
+    .inner_content table {
+      background-color: white;
+    }
+
+    li img {
+      width: 100%;
+      height: 100%;
+    }
+
+    input[type=text] {
+      color: black;
+    }
+
+    form {
+      margin-bottom: 0em;
+    }
+
+    /* ---------------------------- */
+    /*  Table Styles
+------------------------------- */
+
+    .table-wrapper {
+      position: absolute;
+      top: 10%;
+      width: 95%;
+      margin: 50px;
+      box-shadow: 0px 35px 50px rgba(123, 128, 151, 0.1);
+    }
+    .table-wrapper .txt{
+      font-size: 1.4em;
+      font-weight: bold;
+    }
+
+    .table {
+      /*margin-top:10px;*/
+      /*用來調table在頁面中的位置*/
+      border-collapse: collapse;
+      width: 100%;
+      background-color: white;
+    }
+
+    .table td,
+    .table th {
+      text-align: center;
+      padding: 10px;
+    }
+
+    .table td {
+      border-right: 1px solid #f8f8f8;
+    }
+
+    /*  thead th color
+------------------------------- */
+
+    .table thead th {
+      color: #ffffff;
+      background: #ffb4a2;
+      /* 指定第一個和預設的標題顏色 */
+    }
+
+    .table thead th:nth-child(2) {
+      background: #e5989b;
+      /* 指定第二個標題顏色 */
+    }
+
+    .table thead th:nth-child(3) {
+      background: #b5838d;
+      /* 指定第三個標題顏色 */
+    }
+
+    .table thead th:nth-child(4) {
+      background: #6d6875;
+      /* 指定第四個標題顏色 */
+    }
+
+    /*  table ul
+------------------------------- */
+
+    .table ul {
+      padding: 20px;
+      margin: 0;
+      text-align: left;
+    }
+
+    .table ul li {
+      border-bottom: 1px solid #e7e7e7;
+      padding: 5px;
+      position: relative;
+      list-style-type: none;
+    }
+
+    /*  Responsive
+------------------------------- */
+
+    @media (max-width: 767px) {
+      .table-wrapper {
+        margin: 30px 15px;
+      }
+
+      .table thead {
+        display: none;
+      }
+
+      .table td {
+        display: block;
+        /* 一定要下！ */
+        padding: 0;
+      }
+
+      .table td:before {
+        content: attr(data-title);
+        /* 顯示 data-title */
+        display: inline-block;
+        width: 100%;
+        font-weight: 500;
+        padding: 6px 0;
+        color: #ffffff;
+        background: #ffb4a2;
+        /* 指定第一個和預設的標題顏色 */
+      }
+
+      .table td:nth-child(2):before {
+        background: #e5989b;
+        /* 指定第二個標題顏色 */
+      }
+
+      .table td:nth-child(3):before {
+        background: #b5838d;
+        /* 指定第三個標題顏色 */
+      }
+
+      .table td:nth-child(4):before {
+        background: #6d6875;
+        /* 指定第四個標題顏色 */
+      }
+    }
+  </style>
+
 
 </head>
+
+
 <body>
-    
-<div class="table-wrapper">
-    <br><br>搜尋：
+
+  <nav>
+    <a href="./index.html" class="logo">拉麵地圖ラーメンマップ</a>
+    <ul>
+      <li><a href="./map.html">地圖。地図</a></li>
+      <li><a href="./route_ver1.html">捷運路線。MRTルート</a></li>
+      <li><a href="./explore.html">探索。見る</a></li>
+    </ul>
+  </nav>
+
+
+
+  <div class="table-wrapper">
+    <br><br><p class="txt">搜尋：</p>
     <textarea></textarea>>
-    <br><br><br><br>搜索結果：
-  <table class="table">
-    <thead >
-      <tr>
-        <th>拉麵店 ラーメン店</th>
-        <th>拉麵種類 ラーメン種類</th>
-        <th>價錢　いくら</th>
-        <th>捷運站 MRTルート</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td data-title="拉麵店">
-          <ul>
-            <li>一蘭拉麵 天然とんこつラーメン専門店一蘭</li>
-            <li>一風堂 かえし</li>
-            <li>花月嵐 らあめん</li>
-          </ul>
-        </td>
-        <td data-title="拉麵種類">
-          <ul>
-            <li>豚骨拉麵 豚骨(とんこつ) ラーメン</li>
-            <li>味噌拉麵 みそラーメン   </li>
-            <li>地獄拉麵 地獄ラーメン(じごくラーメン)</li>
-          </ul>
-        </td>
-        <td data-title="價錢">
-          <ul>
-            <li>280</li>
-            <li>200</li>
-            <li>150</li>
-          </ul>
-        </td>
-        <td data-title="捷運站">
-          <ul>
-            <li>象山</li>
-            <li>信義安和</li>
-            <li>西門町</li>
-          </ul>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+    <br><br><br><br>
+    <p class="txt">搜索結果：</p>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>拉麵店 ラーメン店</th>
+          <th>拉麵種類 ラーメン種類</th>
+          <th>價錢　いくら</th>
+          <th>捷運站 MRTルート</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td data-title="拉麵店">
+            <ul>
+              <li>一蘭拉麵 天然とんこつラーメン専門店一蘭</li>
+              <li>一風堂 かえし</li>
+              <li>花月嵐 らあめん</li>
+            </ul>
+          </td>
+          <td data-title="拉麵種類">
+            <ul>
+              <li>豚骨拉麵 豚骨(とんこつ) ラーメン</li>
+              <li>味噌拉麵 みそラーメン </li>
+              <li>地獄拉麵 地獄ラーメン(じごくラーメン)</li>
+            </ul>
+          </td>
+          <td data-title="價錢">
+            <ul>
+              <li>280</li>
+              <li>200</li>
+              <li>150</li>
+            </ul>
+          </td>
+          <td data-title="捷運站">
+            <ul>
+              <li>象山</li>
+              <li>信義安和</li>
+              <li>西門町</li>
+            </ul>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </body>
+
 </html>
