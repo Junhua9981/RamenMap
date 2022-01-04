@@ -30,36 +30,86 @@
       <h3>
         拉麵搜索功能  
       </h3>
-        <!-- 第1個搜尋Bar -->
       <div class = "row">
-        
-      <form class = "form-group row" action="/searchStore.php">
-        <div class="col-sm-4">  
-          <input type="text" class="form-control" placeholder="Search by storename" name="search">
-          <!-- <button class="btn btn-success" type="submit">Go</button> -->
-        </div>  
-        <div class = "col-sm-3">
-        <select class="form-select  mb-3" aria-label=".form-select-lg example">
-          <option selected>Search by MRT route</option>
-          <option value="1">紅線</option>
-          <option value="2">綠線</option>
-          <option value="3">黃線</option>
-        </select>
-      </div>
-        <div class = "col-sm-1">
-          <button class="btn btn-success" type="submit" width="10" height="10" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-              <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
-            </svg>Go
-          </button>
-        </div>
-
-      </form> 
-      </div>
-
+      <!-- 第1個搜尋Bar -->
+      <form class = "form-group row" action=""> <!--action="php/searchStore.php" method = "post""-->
+        <div class="col-sm-3">
+          <div class="input-group">
+            <input type="text" class="form-control" placeholder="Search by id">   
+            <div class="input-group-btn">
+              <button class="btn btn-success" type="submit" id ="search_Store_id">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                  <path d="M11.742 10.344a  6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                </svg>Go
+              </button>
+            </div>        
+                      
+          </div> 
+          
+        </div>                             
+            
+      <!-- 第2個搜尋Bar -->
+        <div class="col-sm-4">
+          <form class = "form-group row" action="/searchRoute.php" method = "post">
+            <div class="input-group">
+            <input type="text" class="form-control" placeholder="Search by name" >
+            <div class="input-group-btn">
+              <button class="btn btn-success" type="submit" id ="search_Route_id">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                  <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                </svg>Go
+              </button>
+            </div>
+          </div> 
+          </form>       
+        </div>      
+      </div> 
       <hr>
       <div class = "row">
         <h1>搜索結果：</h1>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>拉麵店 ラーメン店</th>
+              <th>捷運路線 MRTろせん</th>
+              <!-- <th>價錢 いくら</th> -->
+              <th>捷運站 MRTルート</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td data-title="拉麵店">
+                <ul id = "store_result_id">
+                  <!-- <li>一蘭拉麵 天然とんこつラーメン専門店一蘭</li>
+                  <li>一風堂 かえし</li>
+                  <li>花月嵐 らあめん</li> -->
+                </ul>
+              </td>
+              <td data-title="捷運路線">
+                <ul id = "MRT_Route_result_id">
+                  <!-- <li>豚骨拉麵 豚骨(とんこつ) ラーメン</li>
+                  <li>味噌拉麵 みそラーメン </li>
+                  <li>地獄拉麵 地獄ラーメン(じごくラーメン)</li> -->
+                </ul>
+              </td>
+              <!-- <td data-title="價錢"> -->
+                <!-- <ul> -->
+                  <!-- <li>280</li>
+                  <li>200</li>
+                  <li>150</li> -->
+                <!-- </ul> -->
+              <!-- </td> -->
+              <td data-title="捷運站">
+                <ul id = "MRT_Station_id">
+                  <!-- <li>象山</li>
+                  <li>信義安和</li>
+                  <li>西門町</li> -->
+                </ul>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <!-- 寫死的 -->
         <!-- <table class="table">
           <thead>
             <tr>
@@ -113,8 +163,61 @@
   <a class="dropdown-item" href="#">Separated link</a> -->
 <!-- </div> -->
 <script>
+  window.addEventListener('load',function(){
+
+  });
+  /*註冊按鈕*/
+  const search_Store_btn = document.getElementById('search_Store_id');
+  const search_Store_btn2 = document.getElementById('search_Route_id');
+  /*將按鈕與事件click註冊*/
+  search_Store_btn.addEventListener('click',find_result_1,false);
+  search_Store_btn2.addEventListener('click',find_result_1,false);
+
+  class store_result {
+    constructor(storename,MRTStation,MRTRoute,Tel,BusinessHour)    {   //storename, MRTStation, MRTRoute, Tel, BusinessHour, iframe
+      this.storename = storename;
+      this.MRTStation = MRTStation;
+      this.MRTRoute = MRTRoute;
+      this.Tel = Tel;
+      this.BusinessHour = BusinessHour;
+      console.log('storename',this.storename);
+      console.log('MRT_route',this.MRTRoute);
+    }
+  }
+
+  let all_result = [];  //如果有多筆資料，就要用到這個陣列
+  let yeeLan = new store_result("一蘭拉麵","紅樹林","紅線","878787","2:00~3:00"); //其中一筆資料
   
-  document.addEventListener()
+  let store_result_table = document.getElementById('store_result_id');
+  let MRT_Route_table = document.getElementById('MRT_Route_result_id');
+  let MRT_Station_table = document.getElementById('MRT_Station_id');
+
+  function find_result_1(){
+    console.log("搜尋商店按鈕按下去");
+    /*單筆資料用法*/
+    all_result.push(yeeLan);
+    store_result_table.innerHTML += "<li>"+ yeeLan.storename +"</li>";
+    MRT_Route_table.innerHTML += "<li>"+ yeeLan.MRTRoute +"</li>";
+    MRT_Station_table.innerHTML += "<li>"+ yeeLan.MRTStation +"</li>";
+    event.preventDefault(); //預防按按鈕會刷新頁面
+    /*多筆資料用法*/
+    all_result.forEach(function(all_result) {
+        console(all_result.value);
+    })
+  }
+
+  // function test2(){
+  //   console.log("搜尋捷運按鈕按下去");
+  //    /*單筆資料用法*/
+  //    all_result.push(yeeLan);
+  //   store_result_table.innerHTML += "<li>"+ yeeLan.storename +"</li>";
+  //   MRT_Route_table.innerHTML += "<li>"+ yeeLan.MRTRoute +"</li>";
+  //   MRT_Station_table.innerHTML += "<li>"+ yeeLan.MRTStation +"</li>";
+  //   event.preventDefault(); //預防按按鈕會刷新頁面
+  //   /*多筆資料用法*/
+  //   result.push() => function {
+  //   };
+  // }
 </script>
 </body>
 </html>
