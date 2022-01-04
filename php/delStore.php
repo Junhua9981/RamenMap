@@ -1,7 +1,7 @@
 <?php
     include "db_conn_ramen.php";
 
-    $StoreName = "teststore";//$_REQUEST["StoreName"];//前端需要同步 ex:"testStore"
+    $StoreName = $_REQUEST["StoreName"];//前端需要同步 ex:"testStore"
 
     $query = ("SELECT delCount FROM store WHERE StoreName =?");
     $stmt = $db->prepare($query);    //db為db_conn_sofware.php新建的連線物件 
