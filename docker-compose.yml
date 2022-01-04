@@ -1,0 +1,56 @@
+version: '3'
+networks:
+    lnmp-net:
+        driver: bridge
+services:
+    mariadb:
+        container_name: mariadb
+        image: mariadb:10.4
+        ports:
+            - 7414:3006
+        environment:
+            - MYSQL_ROOT_PASSWORD=root
+        volumes:
+            - ./docker/data/mysql:/var/lib/mysql
+        restart: always
+        command: ['mysqld', '--character-set-server=utf8']
+        networks:
+            - lnmp-net
+    nginx:
+        container_name: nginx
+        image: nginx:1.16.1
+        ports:
+            - 8080:80
+            - 443:443
+        volumes:
+            - ./www:/usr/share/nginx/html
+            - ./docker/config/proxy/conf.d:/etc/nginx/conf.d
+            - ./docker/log/proxy:/var/log/nginx
+        depends_on:
+            - mariadb
+            - php
+        restart: always
+        networks:
+            - lnmp-net
+    php:
+        container_name: php
+        image: php:fpm    
+        volumes:
+            - ./www:/usr/share/nginx/html
+            - ./docker/log/cgi:/var/log/php-fpm
+        restart: always
+        networks:
+            - lnmp-net
+    phpmyadmin:
+        container_name: phpmyadmin
+        image: phpmyadmin:latest
+        ports:
+            - 81:80
+        environment:
+          - PMA_ARBITRARY=0
+          - PMA_HOST=mariadb
+        restart: always
+        depends_on:
+        - mariadb
+        networks:
+            - lnmp-net
