@@ -103,15 +103,15 @@
       //       iframe:"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3611.5847669164764!2d121.77568361493257!3d25.14972548391821!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x345d4f08b895b853%3A0x3f3dc5d49043662b!2zMjAy5Z-66ZqG5biC5Lit5q2j5Y2A5rW35r-x6YeM!5e0!3m2!1szh-TW!2stw!4v1641318165918!5m2!1szh-TW!2stw",
       //     },
       // ];
-      function getStore(name , route){
+      function getStore(name){
           axios.get("http://10.147.20.89/searchStore.php",  {
             params: {
               StoreName: name,
             }
           }).then((res)=>{
-            console.log(res);
+            // console.log(res);
             store=res.data; 
-            console.log(store);
+            // console.log(store);
             renderResult();
           }).catch((err)=>{
             console.log(err);
@@ -163,43 +163,60 @@
       
       function renderResult(){
         let output='<ol class="list-group list-group-numbered">';
-        store.forEach((store)=>{
+        let selectedRoute = document.getElementById('route').value;
+        // console.log(selectedRoute);
+        if(selectedRoute !== 'notSelected'){
+          store = store.filter((item)=>{
+            return item.MRTRoute==selectedRoute;
+          });
+        }
+        if( store.length<1){
+          console.log("no result");
           output+=`
-            <li class="list-group-item d-flex justify-content-between align-items-start searchResultHov" onclick='showMap("${store.iframe}")' >
-              <div class="ms-2 me-auto ">
-                <div class="fw-bold">${store.StoreName}</div>
-                <small> ${store.MRTStation}</small></br>
-                <small> ${store.Tel}</small>
-                </div>
-                <button  class="btn" style="align:right"><svgxmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-                  <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
-                </svg></button >
-            `;
-            if(store.MRTRoute==="淡水信義線(紅線)"){
-              output+=`<span class="badge badge-danger rounded-pill" style="color:white;">${store.MRTRoute}</span>`;
-            }
-            else if(store.MRTRoute==="綠"){
-              output+=`<span class="badge badge-success rounded-pill" style="color:white;">${store.MRTRoute}</span>`;
-            }
-            else if(store.MRTRoute==="黃"){
-              output+=`<span class="badge badge-warning rounded-pill" style="color:white;">${store.MRTRoute}</span>`;
-            }
-            else if(store.MRTRoute==="棕"){
-              output+=`<span class="badge rounded-pill" style="background:brown; color:white;">${store.MRTRoute}</span>`;
-            }
-            else if(store.MRTRoute==="藍"){
-              output+=`<span class="badge rounded-pill" style="background:blue; color:white;">${store.MRTRoute}</span>`;
-            }
-            else if(store.MRTRoute==="橘"){
-              output+=`<span class="badge rounded-pill" style="background:orange; color:white;">${store.MRTRoute}</span>`;
-            }
-            else{
-              output+=`<span class="badge rounded-pill" style="background:brown; color:white;">${store.MRTRoute}</span>`;
-            }
-            // output+=`<span class="badge rounded-pill" style="background-color:white">${store.route}</span>
-          output+=`</li>`;
-        });
-        output+='</ol>';
+              <li class="list-group-item d-flex justify-content-between align-items-start searchResultHov" >
+                <div class="ms-2 me-auto ">
+                  <div class="fw-bold">沒有找到任何一家店ㄛ</div>
+                  </div>
+              </li>
+                  `;
+        }
+        else{
+          store.forEach((store)=>{
+            output+=`
+              <li class="list-group-item d-flex justify-content-between align-items-start searchResultHov" onclick="showMap('${store.iframe.trim()}')" >
+                <div class="ms-2 me-auto ">
+                  <div class="fw-bold">${store.StoreName}</div>
+                  <small> ${store.MRTStation}</small></br>
+                  <small> ${store.Tel}</small>
+                  </div>
+                  
+              `;
+              if(store.MRTRoute==="淡水信義線(紅線)"){
+                output+=`<span class="badge badge-danger rounded-pill" style="color:white;">${store.MRTRoute}</span>`;
+              }
+              else if(store.MRTRoute==="松山新店線(綠線)"){
+                output+=`<span class="badge badge-success rounded-pill" style="color:white;">${store.MRTRoute}</span>`;
+              }
+              else if(store.MRTRoute==="黃"){
+                output+=`<span class="badge badge-warning rounded-pill" style="color:white;">${store.MRTRoute}</span>`;
+              }
+              else if(store.MRTRoute==="棕"){
+                output+=`<span class="badge rounded-pill" style="background:brown; color:white;">${store.MRTRoute}</span>`;
+              }
+              else if(store.MRTRoute==="板南線(藍線)"){
+                output+=`<span class="badge rounded-pill" style="background:blue; color:white;">${store.MRTRoute}</span>`;
+              }
+              else if(store.MRTRoute==="中和新蘆線(橘線)"){
+                output+=`<span class="badge rounded-pill" style="background:orange; color:white;">${store.MRTRoute}</span>`;
+              }
+              else{
+                output+=`<span class="badge rounded-pill" style="background:brown; color:white;">${store.MRTRoute}</span>`;
+              }
+              // output+=`<span class="badge rounded-pill" style="background-color:white">${store.route}</span>
+            output+=`</li>`;
+          });
+          output+='</ol>';
+        }
         // console.log(output);
         // console.log(document.getElementById('searchResult'));
         document.getElementById('searchResult').innerHTML=output;
@@ -240,17 +257,18 @@
         </ul>
     </nav>
     <div id="canvary" style="width:100%; height:100%;">
-        <div class="badge container-fluid col-4 bg-light bg-opacity-25 rounded-pill p-4 " style="position:absolute; margin-top: 10%; margin-left: 5%; z-index: 900;">
+        <div class="badge container-fluid col-4 bg-light bg-opacity-25 rounded-pill border p-4 " style="position:absolute; margin-top: 10%; margin-left: 5%; z-index: 900;">
             <div class="d-flex container">
               <input class="form-control me-2" type="search" placeholder="Search" id="searchInp" aria-label="Search" oninput="searchNameByInput()">
-              <!-- <select class="form-select" aria-label="Default select example" id="route">
+              <select class="form-select" aria-label="Default select example" id="route" onclick="searchNameByInput()" >
                 <option selected value="notSelected">選擇路線</option>
-                <option value="橘">橘</option>
+                <option value="中和新蘆線(橘線)">中和新蘆線(橘線)</option>
                 <option value="棕">棕</option>
-                <option value="藍">藍</option>
-                <option value="紅">紅</option>
+                <option value="板南線(藍線)">板南線(藍線)</option>
+                <option value="淡水信義線(紅線)">淡水信義線(紅線)</option>
                 <option value="黃">黃</option>
-              </select> -->
+                <option value="松山新店線(綠線)">松山新店線(綠線)</option>
+              </select>
               <button class="btn btn-outline-success" id="searchBut" >Search</button>
             </div>
         </div>
@@ -264,7 +282,8 @@
       </div>
         <div>
             <div style="position: absolute; top:20vh;width: 100%; height: 80vh; z-index: 800; background-color: gray;" id="map">
-              <iframe id="mmaapp" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4330.059331924696!2d121.56537317627381!3d25.03624326713374!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442ab9922acc39f%3A0xbe47e0c022a5a737!2z5LiA6JitIOWPsOeBo-WPsOWMl-WIpemkqA!5e0!3m2!1szh-TW!2stw!4v1637840676981!5m2!1szh-TW!2stw" style="width: 100%; height: 100%;" id="map"></iframe>
+              <!-- <iframe id="mmaapp" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4330.059331924696!2d121.56537317627381!3d25.03624326713374!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442ab9922acc39f%3A0xbe47e0c022a5a737!2z5LiA6JitIOWPsOeBo-WPsOWMl-WIpemkqA!5e0!3m2!1szh-TW!2stw!4v1637840676981!5m2!1szh-TW!2stw" style="width: 100%; height: 100%;" id="map"></iframe> -->
+              <iframe id="mmaapp" src="https://reurl.cc/akvqlG" style="width: 100%; height: 100%;" id="map"></iframe>
             </div>
         </div>
     </div>
