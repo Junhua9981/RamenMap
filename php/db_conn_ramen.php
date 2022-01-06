@@ -1,4 +1,7 @@
 <?php 
+    header('Access-Control-Allow-Origin: *');
+    header('Content-type: application/json');
+    
     $user = 'ramenmap'; //資料庫使用者名稱
     $password = 'ramenmap'; //資料庫的密碼
     try{
