@@ -99,6 +99,14 @@
 
             axios.get(`https://ramenmap.000webhostapp.com/api/searchID.php?StoreID=${nowID}`)
             .then(res=>{
+                if(!res.data){
+                    alert("這間店已經消失在地球上了...");
+                    console.log(res);
+                    window.location=window.location.origin+"/explore.html";
+                }
+                else {
+                    ramen=res.data;
+                }
                 console.table(res.data);
                 ramen=res.data.map(
                     (item)=>({
@@ -110,6 +118,8 @@
             })
             .catch(err=>{
                 console.log(err);
+                alert("這間店已經消失在地球上了...");
+                window.location=window.location.origin+"/explore.html";
             })
 
         }//StoreID：int , RamenName : string , Price : int 
