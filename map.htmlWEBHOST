@@ -1,0 +1,182 @@
+
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="css/basic.css">
+    <link rel="stylesheet" type="text/css" href="css/map.css">
+    <title>Hello, world!</title>
+    <style>
+      .searchResultHov:hover{
+        background-color: #f5f5f5;
+      }
+    </style>
+
+    <script>
+      function init(){
+        document.getElementById('searchBut').addEventListener("click", searchNameByButton, false);
+      }
+      let store = [];
+      function getStore(name){
+          axios.get("localhost/searchStore.php",  {
+            params: {
+              StoreName: name,
+            }
+          }).then((res)=>{
+            // console.log(res);
+            store=res.data; 
+            // console.log(store);
+            renderResult();
+          }).catch((err)=>{
+            console.log(err);
+          });
+      }
+      function showMap(e){
+        // console.log(e);
+        document.getElementById("mmaapp").setAttribute("src", e);
+      }
+      
+      function renderResult(){
+        let output='<ol class="list-group list-group-numbered">';
+        let selectedRoute = document.getElementById('route').value;
+        // console.log(selectedRoute);
+        if(selectedRoute !== 'notSelected'){
+          store = store.filter((item)=>{
+            return item.MRTRoute==selectedRoute;
+          });
+        }
+        if( store.length<1){
+          console.log("no result");
+          output+=`
+              <li class="list-group-item d-flex justify-content-between align-items-start searchResultHov" >
+                <div class="ms-2 me-auto ">
+                  <div class="fw-bold">沒有找到任何一家店ㄛ</div>
+                  </div>
+              </li>
+                  `;
+        }
+        else{
+          store.forEach((store)=>{
+            output+=`
+              <li class="list-group-item d-flex justify-content-between align-items-start searchResultHov" onclick="showMap('${store.iframe.trim()}')" >
+                <div class="ms-2 me-auto ">
+                  <div class="fw-bold">${store.StoreName}</div>
+                  <small> ${store.MRTStation}</small></br>
+                  <small> ${store.Tel}</small>
+                  </div>
+                  
+              `;
+              if(store.MRTRoute==="淡水信義線(紅線)"){
+                output+=`<span class="badge badge-danger rounded-pill" style="color:white;">${store.MRTRoute}</span>`;
+              }
+              else if(store.MRTRoute==="松山新店線(綠線)"){
+                output+=`<span class="badge badge-success rounded-pill" style="color:white;">${store.MRTRoute}</span>`;
+              }
+              else if(store.MRTRoute==="環狀線(黃線)"){
+                output+=`<span class="badge badge-warning rounded-pill" style="color:white;">${store.MRTRoute}</span>`;
+              }
+              else if(store.MRTRoute==="文湖線(棕線)"){
+                output+=`<span class="badge rounded-pill" style="background:brown; color:white;">${store.MRTRoute}</span>`;
+              }
+              else if(store.MRTRoute==="板南線(藍線)"){
+                output+=`<span class="badge rounded-pill" style="background:blue; color:white;">${store.MRTRoute}</span>`;
+              }
+              else if(store.MRTRoute==="中和新蘆線(橘線)"){
+                output+=`<span class="badge rounded-pill" style="background:orange; color:white;">${store.MRTRoute}</span>`;
+              }
+              else{
+                output+=`<span class="badge rounded-pill" style="background:brown; color:white;">${store.MRTRoute}</span>`;
+              }
+              // output+=`<span class="badge rounded-pill" style="background-color:white">${store.route}</span>
+            output+=`</li>`;
+          });
+          output+='</ol>';
+        }
+        // console.log(output);
+        // console.log(document.getElementById('searchResult'));
+        document.getElementById('searchResult').innerHTML=output;
+        
+      }
+
+      function searchNameByButton(e){
+        var searchName = document.getElementById("searchInp").value;
+        // var route = document.getElementById("route").value;
+        // if(route == "notSelected"){
+        //   return ;
+        // }
+        // console.log(searchName, route);
+        getStore(searchName);
+        // renderResult();
+      }
+
+      function searchNameByInput(){
+        var searchName = document.getElementById("searchInp").value;
+        // console.log(searchName);
+        // console.log(e.target.value);
+        getStore(searchName);
+        // renderResult();
+      }
+
+        window.addEventListener("load", init, false);
+    </script>
+  
+  </head>
+  <body>
+    
+    <nav>
+        <a href="./index.html" class="logo">拉麵地圖ラーメンマップ</a>
+        <ul>
+            <li><a href="./map.html" class="active">地圖。地図</a></li>
+            <li><a href="./route_ver1.html">捷運路線。MRTルート</a></li>
+            <li><a href="./explore.html">探索。見る</a></li>
+        </ul>
+    </nav>
+    <div id="canvary" style="width:100%; height:100%;">
+        <div class="badge container-fluid col-4 bg-light bg-opacity-25 rounded-pill border p-4 " style="position:absolute; margin-top: 10%; margin-left: 5%; z-index: 900;">
+            <div class="d-flex container">
+              <input class="form-control me-2" type="search" placeholder="Search" id="searchInp" aria-label="Search" oninput="searchNameByInput()">
+              <select class="form-select" aria-label="Default select example" id="route" onclick="searchNameByInput()" >
+                <option selected value="notSelected">選擇路線</option>
+                <option value="中和新蘆線(橘線)">中和新蘆線(橘線)</option>
+                <option value="文湖線(棕線)">文湖線(棕線)</option>
+                <option value="板南線(藍線)">板南線(藍線)</option>
+                <option value="淡水信義線(紅線)">淡水信義線(紅線)</option>
+                <option value="環狀線(黃線)">環狀線(黃線)</option>
+                <option value="松山新店線(綠線)">松山新店線(綠線)</option>
+              </select>
+              <button class="btn btn-outline-success" id="searchBut" >Search</button>
+            </div>
+        </div>
+        <div class="container col-3"style="overflow-y:auto; height: 50vh;position:absolute; margin-top: 15%; margin-left: 7vw; z-index: 900;">
+            <div  id="searchResult" >
+              
+            </div>
+           
+        <!-- <div class="container" style="position:absolute; margin-top: 15%; margin-left: 5%; z-index: 2000;"></div> -->
+
+      </div>
+        <div>
+            <div style="position: absolute; top:20vh;width: 100%; height: 80vh; z-index: 800; background-color: gray;" id="map">
+              <!-- <iframe id="mmaapp" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4330.059331924696!2d121.56537317627381!3d25.03624326713374!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442ab9922acc39f%3A0xbe47e0c022a5a737!2z5LiA6JitIOWPsOeBo-WPsOWMl-WIpemkqA!5e0!3m2!1szh-TW!2stw!4v1637840676981!5m2!1szh-TW!2stw" style="width: 100%; height: 100%;" id="map"></iframe> -->
+              <iframe id="mmaapp" src="https://reurl.cc/akvqlG" style="width: 100%; height: 100%;" id="map"></iframe>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  </body>
+</html>
