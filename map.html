@@ -23,88 +23,8 @@
         document.getElementById('searchBut').addEventListener("click", searchNameByButton, false);
       }
       let store = [];
-      // const store = [
-      //     {
-      //       name:"a",
-      //       address:"b",
-      //       route:"紅",
-      //       iframe:"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3611.5266983303873!2d121.76820901493276!3d25.15168758391731!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x345d4f01516703bf%3A0x95ab508703cfd380!2zMjAy5Z-66ZqG5biC5Lit5q2j5Y2A5q2j5r-x6YeM!5e0!3m2!1szh-TW!2stw!4v1641318114246!5m2!1szh-TW!2stw",
-      //     },
-      //     {
-      //       name:"aa",
-      //       address:"bb",
-      //       route:"綠",
-      //       iframe:"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3611.5847669164764!2d121.77568361493257!3d25.14972548391821!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x345d4f08b895b853%3A0x3f3dc5d49043662b!2zMjAy5Z-66ZqG5biC5Lit5q2j5Y2A5rW35r-x6YeM!5e0!3m2!1szh-TW!2stw!4v1641318165918!5m2!1szh-TW!2stw",
-      //     },
-      //     {
-      //       name:"aa",
-      //       address:"bb",
-      //       route:"棕",
-      //       iframe:"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3611.5847669164764!2d121.77568361493257!3d25.14972548391821!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x345d4f08b895b853%3A0x3f3dc5d49043662b!2zMjAy5Z-66ZqG5biC5Lit5q2j5Y2A5rW35r-x6YeM!5e0!3m2!1szh-TW!2stw!4v1641318165918!5m2!1szh-TW!2stw",
-      //     },
-      //     {
-      //       name:"aa",
-      //       address:"bb",
-      //       route:"藍",
-      //       iframe:"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3611.5847669164764!2d121.77568361493257!3d25.14972548391821!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x345d4f08b895b853%3A0x3f3dc5d49043662b!2zMjAy5Z-66ZqG5biC5Lit5q2j5Y2A5rW35r-x6YeM!5e0!3m2!1szh-TW!2stw!4v1641318165918!5m2!1szh-TW!2stw",
-      //     },
-      //     {
-      //       name:"aa",
-      //       address:"bb",
-      //       route:"橘",
-      //       iframe:"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3611.5847669164764!2d121.77568361493257!3d25.14972548391821!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x345d4f08b895b853%3A0x3f3dc5d49043662b!2zMjAy5Z-66ZqG5biC5Lit5q2j5Y2A5rW35r-x6YeM!5e0!3m2!1szh-TW!2stw!4v1641318165918!5m2!1szh-TW!2stw",
-      //     },
-      //     {
-      //       name:"aa",
-      //       address:"bb",
-      //       route:"綠",
-      //       iframe:"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3611.5847669164764!2d121.77568361493257!3d25.14972548391821!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x345d4f08b895b853%3A0x3f3dc5d49043662b!2zMjAy5Z-66ZqG5biC5Lit5q2j5Y2A5rW35r-x6YeM!5e0!3m2!1szh-TW!2stw!4v1641318165918!5m2!1szh-TW!2stw",
-      //     },
-      //     {
-      //       name:"aa",
-      //       address:"bb",
-      //       route:"棕",
-      //       iframe:"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3611.5847669164764!2d121.77568361493257!3d25.14972548391821!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x345d4f08b895b853%3A0x3f3dc5d49043662b!2zMjAy5Z-66ZqG5biC5Lit5q2j5Y2A5rW35r-x6YeM!5e0!3m2!1szh-TW!2stw!4v1641318165918!5m2!1szh-TW!2stw",
-      //     },
-      //     {
-      //       name:"aa",
-      //       address:"bb",
-      //       route:"藍",
-      //       iframe:"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3611.5847669164764!2d121.77568361493257!3d25.14972548391821!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x345d4f08b895b853%3A0x3f3dc5d49043662b!2zMjAy5Z-66ZqG5biC5Lit5q2j5Y2A5rW35r-x6YeM!5e0!3m2!1szh-TW!2stw!4v1641318165918!5m2!1szh-TW!2stw",
-      //     },
-      //     {
-      //       name:"aa",
-      //       address:"bb",
-      //       route:"橘",
-      //       iframe:"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3611.5847669164764!2d121.77568361493257!3d25.14972548391821!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x345d4f08b895b853%3A0x3f3dc5d49043662b!2zMjAy5Z-66ZqG5biC5Lit5q2j5Y2A5rW35r-x6YeM!5e0!3m2!1szh-TW!2stw!4v1641318165918!5m2!1szh-TW!2stw",
-      //     },
-      //     {
-      //       name:"aa",
-      //       address:"bb",
-      //       route:"綠",
-      //       iframe:"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3611.5847669164764!2d121.77568361493257!3d25.14972548391821!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x345d4f08b895b853%3A0x3f3dc5d49043662b!2zMjAy5Z-66ZqG5biC5Lit5q2j5Y2A5rW35r-x6YeM!5e0!3m2!1szh-TW!2stw!4v1641318165918!5m2!1szh-TW!2stw",
-      //     },
-      //     {
-      //       name:"aa",
-      //       address:"bb",
-      //       route:"棕",
-      //       iframe:"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3611.5847669164764!2d121.77568361493257!3d25.14972548391821!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x345d4f08b895b853%3A0x3f3dc5d49043662b!2zMjAy5Z-66ZqG5biC5Lit5q2j5Y2A5rW35r-x6YeM!5e0!3m2!1szh-TW!2stw!4v1641318165918!5m2!1szh-TW!2stw",
-      //     },
-      //     {
-      //       name:"aa",
-      //       address:"bb",
-      //       route:"藍",
-      //       iframe:"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3611.5847669164764!2d121.77568361493257!3d25.14972548391821!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x345d4f08b895b853%3A0x3f3dc5d49043662b!2zMjAy5Z-66ZqG5biC5Lit5q2j5Y2A5rW35r-x6YeM!5e0!3m2!1szh-TW!2stw!4v1641318165918!5m2!1szh-TW!2stw",
-      //     },
-      //     {
-      //       name:"aa",
-      //       address:"bb",
-      //       route:"橘",
-      //       iframe:"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3611.5847669164764!2d121.77568361493257!3d25.14972548391821!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x345d4f08b895b853%3A0x3f3dc5d49043662b!2zMjAy5Z-66ZqG5biC5Lit5q2j5Y2A5rW35r-x6YeM!5e0!3m2!1szh-TW!2stw!4v1641318165918!5m2!1szh-TW!2stw",
-      //     },
-      // ];
       function getStore(name){
-          axios.get("http://10.147.20.89/searchStore.php",  {
+          axios.get("https://ramenmap.000webhostapp.com/api/searchStore.php",  {
             params: {
               StoreName: name,
             }
@@ -116,45 +36,6 @@
           }).catch((err)=>{
             console.log(err);
           });
-
-
-        // if(!name && route=="notSelected")return ;
-        // else if(name && route=="notSelected"){
-        //   axios.get("http://10.147.20.89/searchStore.php",  {
-        //     params: {
-        //       name: name,
-        //     }
-        //   }).then((res)=>{
-        //     console.log(res);
-        //   store=res.data.; 
-        //   }).catch((err)=>{
-        //     console.log(err);
-        //   });
-        // }
-        // else if(!name && route!="notSelected"){
-        //   axios.get("http://10.147.20.89/searchStore.php",  {
-        //     params: {
-        //       route: route,
-        //     }
-        //   }).then((res)=>{
-        //   store=res.data; 
-        //   }).catch((err)=>{
-        //     console.log(err);
-        //   });
-        // }
-        // else{
-        //   axios.get("http://10.147.20.89/searchStore.php",  {
-        //     params: {
-        //       name: name,
-        //       route: route,
-        //     }
-        //   }).then((res)=>{
-        //   store=res.data; 
-        //   }).catch((err)=>{
-        //     console.log(err);
-        //   });
-        // }
-        // console.log(store);
       }
       function showMap(e){
         // console.log(e);

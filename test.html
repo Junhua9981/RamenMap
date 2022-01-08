@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel = "stylesheet" href = "https://bootswatch.com/5/zephyr/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <div calss = "row">
+        <div class = "col-sm-4">
+            <!-- <form action="#" method = "GET">        -->
+                <div class="input-group">
+                  <input type="text" class="form-control"  id ="searchStoreInput" placeholder="Search by id" name = "StoreName_submit">   
+                  <div class="input-group-btn">
+                    <button class="btn btn-success" id="searchStoreBut" type="submit" onclick="find_result_1( 1)">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                        <path d="M11.742 10.344a  6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                      </svg>Go
+                    </button>
+                    <button class="btn btn-success" id="searchStoreBut" type="submit" onclick="find_result_1( 2)">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                        <path d="M11.742 10.344a  6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                      </svg>Go
+                    </button>
+                    <button class="btn btn-success" id="searchStoreBut" type="submit" onclick="find_result_1( 3)">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                        <path d="M11.742 10.344a  6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                      </svg>Go
+                    </button>
+                  </div  >  
+                </div>
+              <!-- </form> -->
+        </div>
+        <div>
+          
+
+        </div>
+    </div>    
+    <script>
+      var searchStoreInput;
+      var searchStoreBut;
+      function init(){
+        searchStoreInput = document.getElementById('searchStoreInput');
+        searchStoreBut   = document.getElementById('searchStoreBut');
+        /*將按鈕與事件click註冊*/
+      }
+        /*註冊按鈕*/
+        
+      function find_result_1(type){
+        console.log("搜尋商店按鈕按下去");
+        let Store_Name = searchStoreInput.value;
+        // console.log('typeof(search_Store_btn)'typeof(search_Store_btn));
+        // console.log('search_Store_btn：',search_Store_btn);
+        // console.log('search_Store_id.value：',Store_Name);
+        console.log('Store_Name：' , Store_Name);
+
+        let response;
+        if(type===1)response=getAxios1(Store_Name);
+        else if(type===2)response=getAxios2(Store_Name);
+        else if(type===3)response=getAxios3(Store_Name);
+        else response=getAxios1();
+      }
+
+      function getAxios1(Store_Name){ // 用字串串接
+        let response;
+        axios
+        .get('http://10.147.20.89/searchStore.php?StoreName='+Store_Name)
+          .then(res => {
+            console.log(res);
+            response = res.data;
+            console.table(response);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+        return response;
+      }
+
+      function getAxios2(Store_Name){ // 用${}可以把參(變)數放在字串中 注意字串要用`` 而不是''或""
+        let response;
+        axios
+        .get(`http://10.147.20.89/searchStore.php?StoreName=${Store_Name}`)
+          .then(res => {
+            console.log(res);
+            response = res.data;
+            console.table(response);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+        return response;
+      }
+
+      function getAxios3(Store_Name){ // 用axios的params
+        let response;
+        axios
+        .get('http://10.147.20.89/searchStore.php', 
+          {
+            params:{
+              StoreName:Store_Name
+            }
+          }
+        )
+          .then(res => {
+            console.log(res);
+            response = res.data;
+            console.table(response);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+        return response;
+      }
+
+
+      window.addEventListener('load',init,false);
+    </script>
+</body>
+</html>
