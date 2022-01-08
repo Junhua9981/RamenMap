@@ -23,17 +23,22 @@
     $stmt = $db->prepare($query);    //db為db_conn_sofware.php新建的連線物件 
     $error = $stmt->execute(array($delCount,$StoreName)); //執行sql語法
 
+    $query = ("SELECT StoreID FROM store WHERE StoreName =?");
+    $stmt = $db->prepare($query);    //db為db_conn_sofware.php新建的連線物件 
+    $error = $stmt->execute(array($StoreName)); //執行sql語法
+    $result = $stmt->fetchAll();
+    $StoreID = $result[0][0];
+
     if($delCount>=19){
         $query = ("DELETE FROM store WHERE StoreName = ?");
         $stmt = $stmt = $db->prepare($query);
         $error = $stmt->execute(array($StoreName)); //執行sql語法
         $result = $stmt->fetchAll();
 
-        $query = ("DELETE FROM location WHERE StoreName = ?");
+        $query = ("DELETE FROM location WHERE StoreID = ?");
         $stmt = $stmt = $db->prepare($query);
         $error = $stmt->execute(array($StoreName)); //執行sql語法
         $result = $stmt->fetchAll();
-
     }
 
     $query = ("SELECT StoreName FROM store WHERE StoreName = ?");
