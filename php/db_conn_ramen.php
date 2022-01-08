@@ -1,12 +1,13 @@
 <?php 
     header('Access-Control-Allow-Origin: *');
+    header('Access-Control-Allow-Methods:*');
     header('Content-type: application/json');
     
-    $user = 'ramenmap'; //資料庫使用者名稱
-    $password = 'ramenmap'; //資料庫的密碼
+    $user = 'id18244249_root'; //資料庫使用者名稱
+    $password = 'by(KN+\OuR6yGB=Y'; //資料庫的密碼
     try{
         $db = new 
-            PDO('mysql:host=10.147.20.89;dbname=RamenMap;charset=utf8',$user,$password);
+            PDO('mysql:host=localhost;dbname=id18244249_ramenmap;charset=utf8',$user,$password);
         //之後若要結束與資料庫的連線，則使用「$db = null;」
         $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $db->setAttribute(PDO::ATTR_EMULATE_PREPARES,false); //強制預處理 false
