@@ -13,45 +13,53 @@
     <nav>
         <a href="./index.html" class="logo">拉麵地圖ラーメンマップ</a>
         <ul>
-            <li><a href="./map.html" class="active">地圖。地図</a></li>
+            <li><a href="./map.html">地圖。地図</a></li>
             <li><a href="./route_ver1.html">捷運路線。MRTルート</a></li>
             <li><a href="./explore.html">探索。見る</a></li>
         </ul>
     </nav>
 <div class="container">
-    <div calss = "row">
-        <div class = "col-10">
-            <!-- <form action="#" method = "GET">        -->
-                <div class="input-group">
-                  <input type="text" class="form-control"  id ="searchStoreInput" placeholder="Search by id" name = "StoreName_submit">   
-                  <div class="input-group-btn">
-                    <button class="btn btn-success" id="searchStoreBut" type="submit" onclick="findResult()">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-                        <path d="M11.742 10.344a  6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
-                      </svg>Go
-                    </button>
-                  </div  >  
-                </div>
-              <!-- </form> -->
+    <div class="row">
+        <div class="col-6 bg-light" style="overflow-y: auto; height: 80vh;">
+            <br/>
+            <div >
+                <p>店家資訊</p>
+                <p id="storeInfo" style='font-weight:bold;font-size:1.2em'></p>
+            </div>
+            <div>
+                <p>Tel:</p>
+                <p id="storeTel" style='font-weight:bold;font-size:1.2em'></p>
+            </div>
+            <div>
+                <p>Address:</p>
+                <p id="storeAdd" style='font-weight:bold;font-size:1.2em'></p>
+            </div>
+            <div>
+                <p>Open:</p>
+                <p id="storeOpen" style='font-weight:bold;font-size:1.2em'></p>
+            </div>
+            <iframe id="mmaapp" style="width: 100%; height:calc(80%*0.5);" src=""></iframe>
+            <div>
+                <p>店家有誤?</p>
+                <button class="btn btn-info" onclick="delStore()">回報刪除(人數>20即可刪除)</button>
+            </div>
         </div>
-    <br/>
-    <div style="overflow-y: auto; height: 85vh;">
+        <div class="col-6" style="overflow-y: auto; height: 85vh;">
+            <table class="table table-striped bg-light"  >
+                <thead>
+                    <tr>
+                    <th class="col-1">#</th>
+                    <th class="col-4">拉麵名稱</th>
+                    <th class="col-4">價位</th>
+                    <th class="col-3">糾正單價</th>
+                    <!--  RamenName , Price, RamenType -->
+                    </tr>
+                </thead>
+                <tbody id="resultTableBody">
 
-        
-        <table class="table table-striped bg-light"  >
-            <thead>
-                <tr>
-                <th scope="col">#</th>
-                <th scope="col">拉麵名稱</th>
-                <th scope="col">價位</th>
-                <th scope="col">糾正單價</th>
-                <!--  RamenName , Price, RamenType -->
-                </tr>
-            </thead>
-            <tbody id="resultTableBody">
-
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
         <!-- Optional JavaScript -->
@@ -63,12 +71,32 @@
     <script>
         var nowID="";
         var ramen=[];
+        var storeInfo;
         function init(){
+            console.log(window.location);
             nowID=window.location.search.split("=")[1];
-            console.log(nowID);
             renderPage();
         }
         function renderPage(){
+            axios.get(`https://ramenmap.000webhostapp.com/api/searchStoreDetail.php?StoreID=${nowID}`)
+            .then(res=>{
+                if(!res.data){
+                    alert("這間店已經消失在地球上了...");
+                    console.log(res);
+                    window.location=window.location.origin+"/explore.html";
+                }
+                else {
+                    storeInfo=res.data[0];
+                }
+                renderStoreInfo();
+            })
+            .catch(err=>{
+                console.log(err);
+                alert("這間店已經消失在地球上了...");
+                window.location=window.location.origin+"/explore.html";
+            })
+
+
             axios.get(`https://ramenmap.000webhostapp.com/api/searchID.php?StoreID=${nowID}`)
             .then(res=>{
                 console.table(res.data);
@@ -85,15 +113,25 @@
             })
 
         }//StoreID：int , RamenName : string , Price : int 
+
+        function renderStoreInfo(){
+            document.getElementById("storeInfo").innerHTML= storeInfo.StoreName    ;
+            document.getElementById("storeTel").innerHTML = storeInfo.Tel          ;
+            document.getElementById("storeAdd").innerHTML = storeInfo.Address      ;
+            document.getElementById("storeOpen").innerHTML= storeInfo.BusinessHour ;
+            document.getElementById("mmaapp").src=storeInfo.iframe;
+            //document.getElementById("mmaapp").src=`https://www.map.com.tw/m/map.html?lat=${storeInfo.Lat}&lng=${storeInfo.Lng}&zoom=15&marker=${storeInfo.Lat},${storeInfo.Lng}&marker_title=${storeInfo.StoreName}`;
+        }
+
         function renderResult(){
             output="";
             for(let i=0;i<ramen.length;i++){
                 output+=`<tr>
                 <th scope="row">${i+1}</th>
                 <td>${ramen[i].RamenName}</td>
-                ${ramen[i].onEdit?`<td><input type="text" id="editPrice${i}" value="${ramen[i].Price}"></td>`:`<td>${ramen[i].Price}</td>`}
+                ${ramen[i].onEdit?`<td><input type="number" min="0" id="editPrice${i}" value="${ramen[i].Price}"></td>`:`<td>${ramen[i].Price}</td>`}
                 ${ramen[i].onEdit?
-                     `<td><button class="btn btn-success" onclick="putNewPrice(${i});">確認</button></td>`
+                     `<td><button class="btn btn-success" onclick="putNewPrice(${i});">確認</button><button class="btn btn-danger" onclick="ramen[${i}].onEdit=false;renderResult();">取消</button></td>`
                     :`<td><button class="btn btn-success" onclick="ramen[${i}].onEdit=true;renderResult();">修改</button></td>`}
                 </tr>`;
             }
@@ -101,10 +139,19 @@
         }
         function putNewPrice(index){
             let newPrice=document.getElementById(`editPrice${index}`).value;
-            axios.post(`https://ramenmap.000webhostapp.com/api/updatePrice.php`,{
+
+            if(newPrice===""){
+                alert("請輸入新價格");
+                ramen[i].onEdit=false;
+                return;
+            }
+
+            axios.get(`https://ramenmap.000webhostapp.com/api/updatePrice.php`,{
+                params:{
                 StoreID:nowID,
                 RamenName:ramen[index].RamenName,
                 Price:newPrice,
+                }
             })
             .then(
                 res=>{
@@ -112,6 +159,34 @@
                     ramen[index].Price=newPrice;
                     ramen[index].onEdit=false;
                     renderResult();
+                }
+            ).catch(err=>{
+                console.log(err);
+            });
+        }
+
+        function delStore(){
+            axios.get(`https://ramenmap.000webhostapp.com/api/delStore.php`,{
+                params:{
+                    StoreName:storeInfo.StoreName,
+                }
+            })
+            .then(
+                res=>{
+                    console.log(res.data);
+                    if(res.data[1]=="Delete successfully!"){
+                        alert("刪除要求通過");
+                    }
+                    else{
+                        if(res.data[0]=="success"){
+                            alert("已發出要求 待人數達到限制(20人)後 將會自動刪除");
+                        }
+                        else {
+                            alert("要求失敗");
+                        }
+                    }
+                    renderPage();
+                    
                 }
             ).catch(err=>{
                 console.log(err);
