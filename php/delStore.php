@@ -25,7 +25,7 @@
 
     $query = ("SELECT StoreID FROM store WHERE StoreName =?");
     $stmt = $db->prepare($query);    //db為db_conn_sofware.php新建的連線物件 
-    $error = $stmt->execute(array($StoreID)); //執行sql語法
+    $error = $stmt->execute(array($StoreName)); //執行sql語法
     $result = $stmt->fetchAll();
     $StoreID = $result[0][0];
 
