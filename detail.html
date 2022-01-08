@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="css/basic.css">
+</head>
+<body>
+    <nav>
+        <a href="./index.html" class="logo">拉麵地圖ラーメンマップ</a>
+        <ul>
+            <li><a href="./map.html" class="active">地圖。地図</a></li>
+            <li><a href="./route_ver1.html">捷運路線。MRTルート</a></li>
+            <li><a href="./explore.html">探索。見る</a></li>
+        </ul>
+    </nav>
+<div class="container">
+    <div calss = "row">
+        <div class = "col-10">
+            <!-- <form action="#" method = "GET">        -->
+                <div class="input-group">
+                  <input type="text" class="form-control"  id ="searchStoreInput" placeholder="Search by id" name = "StoreName_submit">   
+                  <div class="input-group-btn">
+                    <button class="btn btn-success" id="searchStoreBut" type="submit" onclick="findResult()">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                        <path d="M11.742 10.344a  6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                      </svg>Go
+                    </button>
+                  </div  >  
+                </div>
+              <!-- </form> -->
+        </div>
+    <br/>
+    <div style="overflow-y: auto; height: 85vh;">
+
+        
+        <table class="table table-striped bg-light"  >
+            <thead>
+                <tr>
+                <th scope="col">#</th>
+                <th scope="col">拉麵名稱</th>
+                <th scope="col">價位</th>
+                <th scope="col">糾正單價</th>
+                <!--  RamenName , Price, RamenType -->
+                </tr>
+            </thead>
+            <tbody id="resultTableBody">
+
+            </tbody>
+        </table>
+    </div>
+</div>
+        <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        var nowID="";
+        var ramen=[];
+        function init(){
+            nowID=window.location.search.split("=")[1];
+            console.log(nowID);
+            renderPage();
+        }
+        function renderPage(){
+            axios.get(`https://ramenmap.000webhostapp.com/api/searchID.php?StoreID=${nowID}`)
+            .then(res=>{
+                console.table(res.data);
+                ramen=res.data.map(
+                    (item)=>({
+                        ...item,
+                        onEdit:false,
+                    })
+                );
+                renderResult();
+            })
+            .catch(err=>{
+                console.log(err);
+            })
+
+        }//StoreID：int , RamenName : string , Price : int 
+        function renderResult(){
+            output="";
+            for(let i=0;i<ramen.length;i++){
+                output+=`<tr>
+                <th scope="row">${i+1}</th>
+                <td>${ramen[i].RamenName}</td>
+                ${ramen[i].onEdit?`<td><input type="text" id="editPrice${i}" value="${ramen[i].Price}"></td>`:`<td>${ramen[i].Price}</td>`}
+                ${ramen[i].onEdit?
+                     `<td><button class="btn btn-success" onclick="putNewPrice(${i});">確認</button></td>`
+                    :`<td><button class="btn btn-success" onclick="ramen[${i}].onEdit=true;renderResult();">修改</button></td>`}
+                </tr>`;
+            }
+            document.getElementById("resultTableBody").innerHTML=output;
+        }
+        function putNewPrice(index){
+            let newPrice=document.getElementById(`editPrice${index}`).value;
+            axios.post(`https://ramenmap.000webhostapp.com/api/updatePrice.php`,{
+                StoreID:nowID,
+                RamenName:ramen[index].RamenName,
+                Price:newPrice,
+            })
+            .then(
+                res=>{
+                    console.log(res);
+                    ramen[index].Price=newPrice;
+                    ramen[index].onEdit=false;
+                    renderResult();
+                }
+            ).catch(err=>{
+                console.log(err);
+            });
+        }
+
+        window.addEventListener("load", init, false);
+
+    </script>
+
+</body>
+</html>
