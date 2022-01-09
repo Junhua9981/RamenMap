@@ -1,5 +1,5 @@
 <?php
-    include "db_conn_ramenmap.php";
+    include "db_conn_ramen.php";
     $StoreName = $_REQUEST["StoreName"];
     $Tel = $_REQUEST["Tel"];
     $MRTStation = $_REQUEST["MRTStation"]; 
