@@ -104,6 +104,8 @@
                 console.log(response);
                 if(response.data[0]!="<"){
                     alert("新增成功");
+                    window.location=window.location.origin+`/detail.html?id=${response.data}`;
+                    console.log(response.data);
                 }
                 else{
                     alert("新增失敗");
