@@ -14,7 +14,6 @@
         <a href="./index.html" class="logo">拉麵地圖ラーメンマップ</a>
         <ul>
             <li><a href="./map.html">地圖。地図</a></li>
-            <li><a href="./route_ver1.html">捷運路線。MRTルート</a></li>
             <li><a href="./explore.html" class="active">探索。見る</a></li>
         </ul>
     </nav>
@@ -87,18 +86,24 @@
 
         function renderResult(res){
             output = '';
-            for(let i=0;i<res.length ;i++){
-                output += `
-                <tr>
-                    <th scope="row">${i+1}</th>
-                    <td>${res[i].StoreName}</td>
-                    <td>${res[i].MRTRoute}</td>
-                    <td>${res[i].MRTStation}</td>
-                    <td>${res[i].Tel}</td>
-                    <td>${res[i].BusinessHour}</td>
-                    <td><a href="detail.html?id=${res[i].StoreID}">看詳細</a></td>
-                </tr>
-                `;
+            if(res.length == 0){
+                output += '<tr><td colspan="7">查無資料</td></tr>';
+                output += '<tr><td colspan="3"></td><td colspan="1">找不到想找的店家嗎?</td><td colspan="2"><a href="addStore.html"><button class="btn btn-success" >點我新增店家</button></a></td></tr>';
+            }
+            else{
+                for(let i=0;i<res.length ;i++){
+                    output += `
+                    <tr>
+                        <th scope="row">${i+1}</th>
+                        <td>${res[i].StoreName}</td>
+                        <td>${res[i].MRTRoute}</td>
+                        <td>${res[i].MRTStation}</td>
+                        <td>${res[i].Tel}</td>
+                        <td>${res[i].BusinessHour}</td>
+                        <td><a href="detail.html?id=${res[i].StoreID}">看詳細</a></td>
+                    </tr>
+                    `;
+                }
             }
             // console.log(output);
             document.getElementById('resultTableBody').innerHTML = output;
