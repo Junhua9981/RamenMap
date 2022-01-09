@@ -39,7 +39,8 @@
       }
       function showMap(e){
         // console.log(e);
-        document.getElementById("mmaapp").setAttribute("src", e);
+        if(e===" ")alert("這間店還沒有地圖");
+        else document.getElementById("mmaapp").setAttribute("src", e);
       }
       
       function renderResult(){
@@ -64,7 +65,7 @@
         else{
           store.forEach((store)=>{
             output+=`
-              <li class="list-group-item d-flex justify-content-between align-items-start searchResultHov" onclick="showMap('${store.iframe.trim()}')" >
+              <li class="list-group-item d-flex justify-content-between align-items-start searchResultHov" onclick="showMap('${store.iframe?store.iframe.trim():" "}')" >
                 <div class="ms-2 me-auto ">
                   <div class="fw-bold">${store.StoreName}</div>
                   <small> ${store.MRTStation}</small></br>
