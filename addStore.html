@@ -10,13 +10,20 @@
     <link rel="stylesheet" type="text/css" href="css/basic.css">
 </head>
 <body>
-    <nav>
-        <a href="./index.html" class="logo">拉麵地圖ラーメンマップ</a>
-        <ul>
-            <li><a href="./map.html">地圖。地図</a></li>
-            <li><a href="./explore.html">探索。見る</a></li>
-        </ul>
-    </nav>
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background: #da8045;">
+        <div class="container-fluid">
+          <a class="navbar-brand mr-auto" style="font-size:2em; font-weight: bolder;" href="./index.html">拉麵地圖<small>ラーメンマップ</small></a>
+          <ul class="navbar-nav mr-auto"></ul>
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" style="font-size:1.5em;font-weight: bold;" href="./map.html">地圖。地図</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" style="font-size:1.5em;font-weight: bold;" href="./explore.html">探索。見る</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
 <div class="container">
     <div class="row">
         <div class="col-12 bg-light" style="overflow-y: auto; height: 82vh;">
@@ -91,6 +98,10 @@
             var storeBus=document.getElementById("StoreBus").value;
             var mrtRoute=document.getElementById("MRTRoute").value;
             var mrtStation=document.getElementById("MRTStation").value;
+            if(storeName==""||storeTel==""||storeAdd==""||storeBus==""||mrtRoute==""||mrtStation==""){
+                alert("請填寫完整資訊");
+                return;
+            }
             var storeInfo={
                 "StoreName":storeName,
                 "Tel":storeTel,
