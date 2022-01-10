@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="css/basic.css">
+</head>
+<body  style="background: #da8045;">
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background: #da8045;">
+        <div class="container-fluid">
+          <a class="navbar-brand mr-auto navbarHeader"  href="./index.html">拉麵地圖<small>ラーメンマップ</small></a>
+          <ul class="navbar-nav mr-auto"></ul>
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link"  href="./map.html">地圖。地図</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link"  href="./explore.html">探索。見る</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link"  href="./judge.html">探探索索。見る</a>
+              </li>
+          </ul>
+        </div>
+      </nav>
+      <br/>
+    <div class = "container">
+        <div class = "col-10">
+            <span class="display-5 text-light text-center">比價系統</span>
+                <div class="input-group">
+                  <input type="text" class="form-control"  id ="searchStoreInput" placeholder="Search by name" name = "StoreName_submit">   
+                  <div class="input-group-btn">
+                    <button class="btn btn-success" id="searchStoreBut" type="submit" onclick="getStore()">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                        <path d="M11.742 10.344a  6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                      </svg>Go
+                    </button>
+                  </div  >  
+                </div>
+                <!-- </form> -->
+        </div>
+    </div>
+    <br/>
+    <div class="container col-10" style="overflow: auto; height: 80vh;">
+        <table class="table table-striped bg-light" style="width: 100%;" >
+            <thead>
+                <tr>
+                <th scope="col">#</th>
+                <th scope="col">店家名稱</th>
+                <th scope="col">捷運路線</th>
+                <th scope="col">捷運站名</th>
+                <th scope="col">Tel</th>
+                <th scope="col">營業時間</th>
+                <th scope="col">詳細資料</th>
+                <!-- <th scope="col">EDIT</th>
+                <th scope="col">REMOVE</th> -->
+                </tr>
+            </thead>
+            <tbody id="resultTableBody" >
+
+            </tbody>
+        </table>
+    </div>
+        <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        let store = [];
+        function getStore(){
+            let storeName = document.getElementById("searchStoreInput").value;
+            if(storeName == ""){
+                alert("請輸入店家名稱");
+                return;
+            }
+            axios.get("https://ramenmap.000webhostapp.com/api/searchStore.php",  {
+                params: {
+                StoreName: storeName,
+                }
+            }).then((res)=>{
+                // console.log(res);
+                store=res.data; 
+                // console.log(store);
+                renderResult();
+            }).catch((err)=>{
+                console.log(err);
+            });
+        }
+
+        function renderResult(){
+            output = '';
+            if(store.length == 0){
+                output += '<tr><td colspan="7">查無資料</td></tr>';
+                output += '<tr><td colspan="3"></td><td colspan="1">找不到想找的店家嗎?</td><td colspan="2"><a href="addStore.html"><button class="btn btn-success" >點我新增店家</button></a></td></tr>';
+            }
+            else{
+                store.forEach((store, index)=>{
+                    output+=`
+                    <tr>
+                        <th scope="row">${store.StoreID}</th>
+                        <td>${store.StoreName}</td>
+                        <td>${store.MRTRoute}</td>
+                        <td>${store.MRTStation}</td>
+                        <td>${store.Tel}</td>
+                        <td>${store.BusinessHour}</td>
+                        <td><a href="compare.html?StoreID=${store.StoreID}"><button class="btn btn-success" >比較它</button></a></td>
+                    </tr>
+                    `}
+                );
+            }
+            // console.log(output);
+            document.getElementById('resultTableBody').innerHTML = output;
+        }
+
+    </script>
+
+</body>
+</html>

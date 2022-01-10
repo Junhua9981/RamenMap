@@ -29,10 +29,10 @@
       </nav>
 <div class="container">
     <div class="row">
-        <div class="col-6 bg-light" style="overflow-y: auto; height: 80vh;">
+        <div class="col-4 bg-light" style="overflow-y: auto; height: 80vh;">
             <br/>
             <div >
-                <p>店家資訊</p>
+                <p>被比較店家<small>的詳細資訊</small></p>
                 <p id="storeInfo" style='font-weight:bold;font-size:1.2em'></p>
             </div>
             <div>
@@ -48,19 +48,17 @@
                 <p id="storeOpen" style='font-weight:bold;font-size:1.2em'></p>
             </div>
             <iframe id="mmaapp" style="width: 100%; height:calc(80%*0.5);" src=""></iframe>
-            <div>
-                <p>店家有誤?</p>
-                <button class="btn btn-info" onclick="delStore()">回報刪除(人數>20即可刪除)</button>
-            </div>
         </div>
-        <div class="col-6" style="overflow-y: auto; height: 85vh;">
+        <div class="col-8" style="overflow-y: auto; height: 85vh;">
             <table class="table table-striped bg-light"  >
                 <thead>
                     <tr>
                     <th class="col-1">#</th>
-                    <th class="col-4">拉麵名稱</th>
-                    <th class="col-4">價位</th>
-                    <th class="col-3">糾正單價</th>
+                    <th class="col-3">店家名稱</th>
+                    <th class="col-2">站名</th>
+                    <th class="col-1">線</th>
+                    <th class="col-3">電話</th>
+                    <th class="col-3">營業時間</th>
                     <!--  RamenName , Price, RamenType -->
                     </tr>
                 </thead>
@@ -80,7 +78,7 @@
     <script>
         var nowID="";
         var ramen=[];
-        var storeInfo;
+        var comStores=[];
         function init(){
             console.log(window.location);
             nowID=window.location.search.split("=")[1];
@@ -92,7 +90,7 @@
                 if(!res.data){
                     alert("這間店已經消失在地球上了...");
                     console.log(res);
-                    window.location=window.location.origin+"/explore.html";
+                    // window.location=window.location.origin+"/explore.html";
                 }
                 else {
                     storeInfo=res.data[0];
@@ -102,24 +100,27 @@
             .catch(err=>{
                 console.log(err);
                 alert("這間店已經消失在地球上了...");
-                window.location=window.location.origin+"/explore.html";
+                // window.location=window.location.origin+"/explore.html";
             })
 
-
-            axios.get(`https://ramenmap.000webhostapp.com/api/searchID.php?StoreID=${nowID}`)
+            axios.get(`https://ramenmap.000webhostapp.com/api/compareStore.php?StoreID=${nowID}`)
             .then(res=>{
-                console.table(res.data);
-                ramen=res.data.map(
-                    (item)=>({
-                        ...item,
-                        onEdit:false,
-                    })
-                );
+                if(!res.data){
+                    alert("這間店已經消失在地球上了...");
+                    console.log(res);
+                    // window.location=window.location.origin+"/judge.html";
+                }
+                else {
+                    comStores=res.data;
+                }
                 renderResult();
             })
             .catch(err=>{
                 console.log(err);
+                alert("這間店已經消失在地球上了...");
+                // window.location=window.location.origin+"/judge.html";
             })
+
 
         }//StoreID：int , RamenName : string , Price : int 
 
@@ -134,74 +135,46 @@
 
         function renderResult(){
             output="";
-            for(let i=0;i<ramen.length;i++){
-                output+=`<tr>
-                <th scope="row">${i+1}</th>
-                <td>${ramen[i].RamenName}</td>
-                ${ramen[i].onEdit?`<td><input type="number" min="0" id="editPrice${i}" value="${ramen[i].Price}"></td>`:`<td>${ramen[i].Price}</td>`}
-                ${ramen[i].onEdit?
-                     `<td><button class="btn btn-success" onclick="putNewPrice(${i});">確認</button><button class="btn btn-danger" onclick="ramen[${i}].onEdit=false;renderResult();">取消</button></td>`
-                    :`<td><button class="btn btn-success" onclick="ramen[${i}].onEdit=true;renderResult();">修改</button></td>`}
-                </tr>`;
-            }
+            comStores.forEach(
+                (store, index)=>{
+                    output+=`<tr>
+                    <td>${index+1}</td>
+                    <td>${store.StoreName}</td>
+                    <td>${store.MRTStation}</td>
+                    <td>
+                    `;
+                    if(store.MRTRoute==="淡水信義線(紅線)"){
+                output+=`<span class="badge badge-danger rounded-pill" style="color:white;">${store.MRTRoute}</span>`;
+              }
+              else if(store.MRTRoute==="松山新店線(綠線)"){
+                output+=`<span class="badge badge-success rounded-pill" style="color:white;">${store.MRTRoute}</span>`;
+              }
+              else if(store.MRTRoute==="環狀線(黃線)"){
+                output+=`<span class="badge badge-warning rounded-pill" style="color:white;">${store.MRTRoute}</span>`;
+              }
+              else if(store.MRTRoute==="文湖線(棕線)"){
+                output+=`<span class="badge rounded-pill" style="background:brown; color:white;">${store.MRTRoute}</span>`;
+              }
+              else if(store.MRTRoute==="板南線(藍線)"){
+                output+=`<span class="badge rounded-pill" style="background:blue; color:white;">${store.MRTRoute}</span>`;
+              }
+              else if(store.MRTRoute==="中和新蘆線(橘線)"){
+                output+=`<span class="badge rounded-pill" style="background:orange; color:white;">${store.MRTRoute}</span>`;
+              }
+              else{
+                output+=`<span class="badge rounded-pill" style="background:brown; color:white;">${store.MRTRoute}</span>`;
+              }
+                    output+=
+                    `</td>
+                    <td>${store.Tel}</td>
+                    <td>${store.BusinessHour}</td>
+                    </tr>`;
+                }
+            )
             document.getElementById("resultTableBody").innerHTML=output;
-        }
-        function putNewPrice(index){
-            let newPrice=document.getElementById(`editPrice${index}`).value;
-
-            if(newPrice===""){
-                alert("請輸入新價格");
-                ramen[i].onEdit=false;
-                return;
-            }
-
-            axios.get(`https://ramenmap.000webhostapp.com/api/updatePrice.php`,{
-                params:{
-                StoreID:nowID,
-                RamenName:ramen[index].RamenName,
-                Price:newPrice,
-                }
-            })
-            .then(
-                res=>{
-                    console.log(res);
-                    ramen[index].Price=newPrice;
-                    ramen[index].onEdit=false;
-                    renderResult();
-                }
-            ).catch(err=>{
-                console.log(err);
-            });
+            console.log(output);
         }
 
-        function delStore(){
-            axios.get(`https://ramenmap.000webhostapp.com/api/delStore.php`,{
-                params:{
-                    StoreName:storeInfo.StoreName,
-                }
-            })
-            .then(
-                res=>{
-                    console.log(res.data);
-                    if(res.data[1]=="Delete successfully!"){
-                        alert("刪除要求通過");
-                    }
-                    else{
-                        if(res.data[0]=="success"){
-                            alert("已發出要求 待人數達到限制(20人)後 將會自動刪除");
-                        }
-                        else {
-                            alert("要求失敗");
-                        }
-                    }
-                    renderPage();
-                    
-                }
-            ).catch(err=>{
-                console.log(err);
-                renderPage();
-            });
-        }
 
         window.addEventListener("load", init, false);
 
