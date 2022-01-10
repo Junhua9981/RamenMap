@@ -1,5 +1,5 @@
 <?php
-    include "db_conn_ramenmap.php";
+    include "db_conn_ramen.php";
     $StoreID = $_REQUEST["StoreID"];
     
     $query = ("SELECT store.StoreID, store.StoreName
